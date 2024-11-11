@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "rootDir": ".", // Set to the project root
-    "outDir": "./dist", // Compiled files go to `dist`
+    "rootDir": "./", // Or set to "./src" if most of your code is in `src`
+    "outDir": "./dist", 
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true // Speeds up build time by skipping `.d.ts` checks
   },
   "include": [
-    "server.ts", // Include server.ts in the project root
-    "src/**/*.ts" // Include all TypeScript files in the src directory
+    "server.ts",
+    "src/**/*.ts"
   ]
 }
