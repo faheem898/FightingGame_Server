@@ -10,9 +10,9 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Or specify your client domain here
-    methods: ["GET", "POST"]
+    origin: "*",
   },
+  transports: ["polling", "websocket"], // Enable both transports
 });
 
 const PORT = process.env.PORT || 3000;
