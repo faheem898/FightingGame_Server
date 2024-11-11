@@ -10,7 +10,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow all origins
+    origin: "*", // Or specify your client domain here
+    methods: ["GET", "POST"]
   },
 });
 
