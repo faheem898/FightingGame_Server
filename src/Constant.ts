@@ -43,6 +43,8 @@ export interface IPlayerData {
     placeId?: string;
     totalSpecialPower?: number;
     currentSpecialPower?: number;
+    characterName?: number;
+    roomType?: number;
 }
 export enum PlayerAnimType{
     Hand,

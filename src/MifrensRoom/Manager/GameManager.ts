@@ -14,6 +14,7 @@ import { Player } from "../Player";
 export class GameManager {
   room!: RandomRoom;
   isRoundStart: boolean = false;
+  roundTimeOut: any;
   onGameStart(client: Socket) {
     try {
       console.log("ON GAME SATRT : ");
@@ -31,11 +32,16 @@ export class GameManager {
           placeId: plyr.placeId,
           totalSpecialPower: plyr.totalSpecialPower,
           currentSpecialPower: plyr.currentSpecialPower,
+          characterName: plyr.characterName,
+          roomType: plyr.roomType,
         };
         playingPlayer.push(playerData);
       });
       this.room.io.emit(ServerEvents.GAME_START, JSON.stringify(playingPlayer));
       this.isRoundStart = true;
+      this.roundTimeOut = setTimeout(() => {
+        this.checkTimeOverWinner();
+      }, 30000);
     } catch (error) {
       console.log("On Game Start : ", error);
     }
@@ -130,6 +136,8 @@ export class GameManager {
         placeId: plyr.placeId,
         totalSpecialPower: plyr.totalSpecialPower,
         currentSpecialPower: plyr.currentSpecialPower,
+        characterName: plyr.characterName,
+        roomType: plyr.roomType,
       };
       playingPlayer.push(playerData);
     });
@@ -145,7 +153,7 @@ export class GameManager {
       let LoserPlayer!: Player;
       let playerData: IPlayerData[] = [];
       if (plyr.currentHealth <= 0) {
-        plyr.currentHealth=0;
+        plyr.currentHealth = 0;
         LoserPlayer = plyr;
         plyr.isWinner = false;
         this.isRoundStart = false;
@@ -184,7 +192,18 @@ export class GameManager {
       console.log("===player error====", error);
     }
   }
-
+  checkTimeOverWinner() {
+    try {
+      const players = Array.from(
+        this.room.state.playerManager!.playerList.values()
+      );
+      players.sort((a, b) => a.currentHealth - b.currentHealth);
+      const loser = players[0]; // Player with the lowest health
+      const winner = players[players.length - 1]; // Player with the highest health
+      this.declareWinner(winner, loser);
+      clearInterval(this.roundTimeOut);
+    } catch (error) {}
+  }
   async startNextRound() {
     try {
       console.log("New Round Start");
@@ -198,6 +217,9 @@ export class GameManager {
         JSON.stringify(playersData)
       );
       this.isRoundStart = true;
+      this.roundTimeOut = setTimeout(() => {
+        this.checkTimeOverWinner();
+      }, 30000);
     } catch (error) {}
   }
 
@@ -218,6 +240,8 @@ export class GameManager {
             placeId: plyr.placeId,
             totalSpecialPower: plyr.totalSpecialPower,
             currentSpecialPower: plyr.currentSpecialPower,
+            characterName: plyr.characterName,
+            roomType: plyr.roomType,
           };
           playingPlayer.push(playerData);
           resolve(playingPlayer);

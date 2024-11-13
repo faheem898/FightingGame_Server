@@ -17,6 +17,8 @@ export class Player {
   isWinner: boolean = false;
   isShieldActivated: boolean = false;
   shieldTimeout: any;
+  characterName:any;
+  roomType:any;
 
   constructor(client: Socket, options: any, room: RandomRoom, playerList: any) {
     this.sessionId = client.id; // Always use client's unique socket ID as sessionId
@@ -24,6 +26,8 @@ export class Player {
     this.playerName = options?.playerName;
     this.wagerAmount = options?.wagerAmount;
     this.photoId = options?.photoId;
+    this.characterName= options?.characterName;
+    this.roomType=options?.roomType;
     client.data = { playerId: options?.playerId };
   }
   setShield() {

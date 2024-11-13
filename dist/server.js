@@ -13,8 +13,9 @@ const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*", // Allow all origins
+        origin: "*",
     },
+    transports: ["polling", "websocket"], // Enable both transports
 });
 const PORT = process.env.PORT || 3000;
 // Dictionary to store room instances by type

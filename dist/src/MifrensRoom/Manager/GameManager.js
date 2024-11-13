@@ -32,6 +32,8 @@ class GameManager {
                     placeId: plyr.placeId,
                     totalSpecialPower: plyr.totalSpecialPower,
                     currentSpecialPower: plyr.currentSpecialPower,
+                    characterName: plyr.characterName,
+                    roomType: plyr.roomType,
                 };
                 playingPlayer.push(playerData);
             });
@@ -131,6 +133,8 @@ class GameManager {
                 placeId: plyr.placeId,
                 totalSpecialPower: plyr.totalSpecialPower,
                 currentSpecialPower: plyr.currentSpecialPower,
+                characterName: plyr.characterName,
+                roomType: plyr.roomType,
             };
             playingPlayer.push(playerData);
         });
@@ -213,6 +217,8 @@ class GameManager {
                             placeId: plyr.placeId,
                             totalSpecialPower: plyr.totalSpecialPower,
                             currentSpecialPower: plyr.currentSpecialPower,
+                            characterName: plyr.characterName,
+                            roomType: plyr.roomType,
                         };
                         playingPlayer.push(playerData);
                         resolve(playingPlayer);

@@ -16,6 +16,8 @@ class Player {
         this.playerName = options === null || options === void 0 ? void 0 : options.playerName;
         this.wagerAmount = options === null || options === void 0 ? void 0 : options.wagerAmount;
         this.photoId = options === null || options === void 0 ? void 0 : options.photoId;
+        this.characterName = options === null || options === void 0 ? void 0 : options.characterName;
+        this.roomType = options === null || options === void 0 ? void 0 : options.roomType;
         client.data = { playerId: options === null || options === void 0 ? void 0 : options.playerId };
     }
     setShield() {
