@@ -219,7 +219,7 @@ export class GameManager {
       this.isRoundStart = true;
       this.roundTimeOut = setTimeout(() => {
         this.checkTimeOverWinner();
-      }, 30000);
+      }, 180000);
     } catch (error) {}
   }
 
