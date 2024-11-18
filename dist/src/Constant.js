@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayerAnimType = exports.GAMESTATE = exports.ServerEvents = exports.ClientEvents = void 0;
+exports.getRandomNumber = getRandomNumber;
 var ClientEvents;
 (function (ClientEvents) {
     ClientEvents["DISCONNECT"] = "DISCONNECT";
@@ -38,3 +39,6 @@ var PlayerAnimType;
     PlayerAnimType[PlayerAnimType["Shield"] = 3] = "Shield";
     PlayerAnimType[PlayerAnimType["Movement"] = 4] = "Movement";
 })(PlayerAnimType || (exports.PlayerAnimType = PlayerAnimType = {}));
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

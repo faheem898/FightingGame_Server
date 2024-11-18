@@ -3,6 +3,7 @@ import { RandomRoom } from "../../rooms/RandomRoom";
 import { ChallengeRoom } from "../../rooms/ChallengeRoom";
 import { PlayWithFriendsRoom } from "../../rooms/PlayWithFriendsRoom";
 import {
+  getRandomNumber,
   IPlayerData,
   IPlayerResult,
   IResultData,
@@ -15,9 +16,12 @@ export class GameManager {
   room!: RandomRoom;
   isRoundStart: boolean = false;
   roundTimeOut: any;
-  onGameStart(client: Socket) {
+  roomNo:number=0;
+  async onGameStart(client: Socket) {
     try {
-      console.log("ON GAME SATRT : ");
+      console.log("Helloooooooooo1")
+      this.roomNo=getRandomNumber(0,2);
+      console.log("Random Room : ",this.roomNo);
       let playingPlayer: IPlayerData[] = [];
       this.room.state.playerManager!.playerList.forEach((plyr: Player) => {
         let playerData: IPlayerData = {
@@ -33,7 +37,7 @@ export class GameManager {
           totalSpecialPower: plyr.totalSpecialPower,
           currentSpecialPower: plyr.currentSpecialPower,
           characterName: plyr.characterName,
-          roomType: plyr.roomType,
+          roomType: this.roomNo,
         };
         playingPlayer.push(playerData);
       });
@@ -137,7 +141,7 @@ export class GameManager {
         totalSpecialPower: plyr.totalSpecialPower,
         currentSpecialPower: plyr.currentSpecialPower,
         characterName: plyr.characterName,
-        roomType: plyr.roomType,
+        roomType: this.roomNo,
       };
       playingPlayer.push(playerData);
     });
@@ -241,7 +245,7 @@ export class GameManager {
             totalSpecialPower: plyr.totalSpecialPower,
             currentSpecialPower: plyr.currentSpecialPower,
             characterName: plyr.characterName,
-            roomType: plyr.roomType,
+            roomType: this.roomNo,
           };
           playingPlayer.push(playerData);
           resolve(playingPlayer);

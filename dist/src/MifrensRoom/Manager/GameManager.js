@@ -14,36 +14,44 @@ const Constant_1 = require("../../Constant");
 class GameManager {
     constructor() {
         this.isRoundStart = false;
+        this.roomNo = 0;
     }
     onGameStart(client) {
-        try {
-            console.log("ON GAME SATRT : ");
-            let playingPlayer = [];
-            this.room.state.playerManager.playerList.forEach((plyr) => {
-                let playerData = {
-                    playerId: plyr.playerId,
-                    playerName: plyr.playerName,
-                    sessionId: plyr.sessionId,
-                    isPlaying: plyr.isPlaying,
-                    wagerAmount: plyr.wagerAmount,
-                    totalHealth: plyr.totalHealth,
-                    currentHealth: plyr.currentHealth,
-                    photoId: plyr.photoId,
-                    placeId: plyr.placeId,
-                    totalSpecialPower: plyr.totalSpecialPower,
-                    currentSpecialPower: plyr.currentSpecialPower,
-                    characterName: plyr.characterName,
-                    roomType: plyr.roomType,
-                };
-                playingPlayer.push(playerData);
-            });
-            this.room.io.emit(Constant_1.ServerEvents.GAME_START, JSON.stringify(playingPlayer));
-            this.isRoundStart = true;
-        }
-        catch (error) {
-            console.log("On Game Start : ", error);
-        }
-        const state = this.room.state;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Helloooooooooo1");
+                this.roomNo = (0, Constant_1.getRandomNumber)(0, 2);
+                console.log("Random Room : ", this.roomNo);
+                let playingPlayer = [];
+                this.room.state.playerManager.playerList.forEach((plyr) => {
+                    let playerData = {
+                        playerId: plyr.playerId,
+                        playerName: plyr.playerName,
+                        sessionId: plyr.sessionId,
+                        isPlaying: plyr.isPlaying,
+                        wagerAmount: plyr.wagerAmount,
+                        totalHealth: plyr.totalHealth,
+                        currentHealth: plyr.currentHealth,
+                        photoId: plyr.photoId,
+                        placeId: plyr.placeId,
+                        totalSpecialPower: plyr.totalSpecialPower,
+                        currentSpecialPower: plyr.currentSpecialPower,
+                        characterName: plyr.characterName,
+                        roomType: this.roomNo,
+                    };
+                    playingPlayer.push(playerData);
+                });
+                this.room.io.emit(Constant_1.ServerEvents.GAME_START, JSON.stringify(playingPlayer));
+                this.isRoundStart = true;
+                this.roundTimeOut = setTimeout(() => {
+                    this.checkTimeOverWinner();
+                }, 180000);
+            }
+            catch (error) {
+                console.log("On Game Start : ", error);
+            }
+            const state = this.room.state;
+        });
     }
     updatePlayerPosition(client, data) {
         var _a;
@@ -134,7 +142,7 @@ class GameManager {
                 totalSpecialPower: plyr.totalSpecialPower,
                 currentSpecialPower: plyr.currentSpecialPower,
                 characterName: plyr.characterName,
-                roomType: plyr.roomType,
+                roomType: this.roomNo,
             };
             playingPlayer.push(playerData);
         });
@@ -185,6 +193,17 @@ class GameManager {
             console.log("===player error====", error);
         }
     }
+    checkTimeOverWinner() {
+        try {
+            const players = Array.from(this.room.state.playerManager.playerList.values());
+            players.sort((a, b) => a.currentHealth - b.currentHealth);
+            const loser = players[0]; // Player with the lowest health
+            const winner = players[players.length - 1]; // Player with the highest health
+            this.declareWinner(winner, loser);
+            clearInterval(this.roundTimeOut);
+        }
+        catch (error) { }
+    }
     startNextRound() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -195,6 +214,9 @@ class GameManager {
                 let playersData = yield this.getPlayerData();
                 this.room.io.emit(Constant_1.ServerEvents.NEW_ROUND_START, JSON.stringify(playersData));
                 this.isRoundStart = true;
+                this.roundTimeOut = setTimeout(() => {
+                    this.checkTimeOverWinner();
+                }, 180000);
             }
             catch (error) { }
         });
@@ -218,7 +240,7 @@ class GameManager {
                             totalSpecialPower: plyr.totalSpecialPower,
                             currentSpecialPower: plyr.currentSpecialPower,
                             characterName: plyr.characterName,
-                            roomType: plyr.roomType,
+                            roomType: this.roomNo,
                         };
                         playingPlayer.push(playerData);
                         resolve(playingPlayer);
